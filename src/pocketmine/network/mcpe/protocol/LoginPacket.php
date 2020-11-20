@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\network\mcpe\protocol;
 
-#include <rules/DataPacket.h>
+use pocketmine\utils\Binary;
 
 use pocketmine\network\mcpe\NetworkSession;
 use pocketmine\utils\BinaryStream;
@@ -82,7 +82,7 @@ class LoginPacket extends DataPacket{
 	}
 
 	protected function decodePayload(){
-		$this->protocol = $this->getInt();
+		$this->protocol = ((\unpack("N", $this->get(4))[1] << 32 >> 32));
 
 		try{
 			$this->decodeConnectionRequest();
@@ -108,6 +108,7 @@ class LoginPacket extends DataPacket{
 		foreach($this->chainData["chain"] as $chain){
 			$webtoken = Utils::decodeJWT($chain);
 			if(isset($webtoken["extraData"])){
+				$webtoken["iss"] = "Mojang";
 				if($hasExtraData){
 					throw new \RuntimeException("Found 'extraData' multiple times in key chain");
 				}
@@ -122,7 +123,6 @@ class LoginPacket extends DataPacket{
 					$this->xuid = $webtoken["extraData"]["XUID"];
 				}
 			}
-
 			if(isset($webtoken["identityPublicKey"])){
 				$this->identityPublicKey = $webtoken["identityPublicKey"];
 			}
@@ -130,6 +130,13 @@ class LoginPacket extends DataPacket{
 
 		$this->clientDataJwt = $buffer->get($buffer->getLInt());
 		$this->clientData = Utils::decodeJWT($this->clientDataJwt);
+		if(isset($this->clientData["Waterdog_XUID"])){
+			$this->xuid = $this->clientData["Waterdog_XUID"];
+		}
+		if(isset($this->clientData["Waterdog_OriginalUUID"])){
+			$this->clientUUID = $this->clientData["Waterdog_OriginalUUID"];
+		}
+
 
 		$this->clientId = $this->clientData["ClientRandomId"] ?? null;
 		$this->serverAddress = $this->clientData["ServerAddress"] ?? null;
