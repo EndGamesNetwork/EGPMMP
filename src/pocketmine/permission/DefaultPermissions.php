@@ -24,7 +24,7 @@ declare(strict_types=1);
 namespace pocketmine\permission;
 
 abstract class DefaultPermissions{
-	public const ROOT = "pocketmine";
+	public const ROOT = "egn";
 
 	public static function registerPermission(Permission $perm, Permission $parent = null) : Permission{
 		if($parent instanceof Permission){
@@ -93,12 +93,12 @@ abstract class DefaultPermissions{
 		$time->recalculatePermissibles();
 
 		$kill = self::registerPermission(new Permission(self::ROOT . ".command.kill", "Allows the user to kill players", Permission::DEFAULT_OP), $commands);
-		self::registerPermission(new Permission(self::ROOT . ".command.kill.self", "Allows the user to commit suicide", Permission::DEFAULT_TRUE), $kill);
+		self::registerPermission(new Permission(self::ROOT . ".command.kill.self", "Allows the user to commit suicide", Permission::DEFAULT_OP), $kill);
 		self::registerPermission(new Permission(self::ROOT . ".command.kill.other", "Allows the user to kill other players"), $kill);
 		$kill->recalculatePermissibles();
 
-		self::registerPermission(new Permission(self::ROOT . ".command.me", "Allows the user to perform a chat action", Permission::DEFAULT_TRUE), $commands);
-		self::registerPermission(new Permission(self::ROOT . ".command.tell", "Allows the user to privately message another player", Permission::DEFAULT_TRUE), $commands);
+		self::registerPermission(new Permission(self::ROOT . ".command.me", "Allows the user to perform a chat action", Permission::DEFAULT_OP), $commands);
+		self::registerPermission(new Permission(self::ROOT . ".command.tell", "Allows the user to privately message another player", Permission::DEFAULT_OP), $commands);
 		self::registerPermission(new Permission(self::ROOT . ".command.say", "Allows the user to talk as the console", Permission::DEFAULT_OP), $commands);
 		self::registerPermission(new Permission(self::ROOT . ".command.give", "Allows the user to give items to players", Permission::DEFAULT_OP), $commands);
 		self::registerPermission(new Permission(self::ROOT . ".command.effect", "Allows the user to give/take potion effects", Permission::DEFAULT_OP), $commands);
@@ -108,10 +108,10 @@ abstract class DefaultPermissions{
 		self::registerPermission(new Permission(self::ROOT . ".command.kick", "Allows the user to kick players", Permission::DEFAULT_OP), $commands);
 		self::registerPermission(new Permission(self::ROOT . ".command.stop", "Allows the user to stop the server", Permission::DEFAULT_OP), $commands);
 		self::registerPermission(new Permission(self::ROOT . ".command.list", "Allows the user to list all online players", Permission::DEFAULT_OP), $commands);
-		self::registerPermission(new Permission(self::ROOT . ".command.help", "Allows the user to view the help menu", Permission::DEFAULT_TRUE), $commands);
+		self::registerPermission(new Permission(self::ROOT . ".command.help", "Allows the user to view the help menu", Permission::DEFAULT_OP), $commands);
 		self::registerPermission(new Permission(self::ROOT . ".command.plugins", "Allows the user to view the list of plugins", Permission::DEFAULT_OP), $commands);
 		self::registerPermission(new Permission(self::ROOT . ".command.reload", "Allows the user to reload the server settings", Permission::DEFAULT_OP), $commands);
-		self::registerPermission(new Permission(self::ROOT . ".command.version", "Allows the user to view the version of the server", Permission::DEFAULT_TRUE), $commands);
+		self::registerPermission(new Permission(self::ROOT . ".command.version", "Allows the user to view the version of the server", Permission::DEFAULT_OP), $commands);
 		self::registerPermission(new Permission(self::ROOT . ".command.gamemode", "Allows the user to change the gamemode of players", Permission::DEFAULT_OP), $commands);
 		self::registerPermission(new Permission(self::ROOT . ".command.defaultgamemode", "Allows the user to change the default gamemode", Permission::DEFAULT_OP), $commands);
 		self::registerPermission(new Permission(self::ROOT . ".command.seed", "Allows the user to view the seed of the world", Permission::DEFAULT_OP), $commands);
